@@ -26,7 +26,7 @@ public class playerMotor : MonoBehaviour
             agent.SetDestination(target.position);
             FaceTarget();
         }
-        Debug.Log(GetComponent<NavMeshAgent>().velocity != Vector3.zero);
+ //       Debug.Log(GetComponent<NavMeshAgent>().velocity != Vector3.zero);
 
 
     }

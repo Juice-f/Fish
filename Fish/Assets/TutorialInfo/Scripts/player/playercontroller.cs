@@ -9,9 +9,10 @@ public class playercontroller : MonoBehaviour
     public Interactable focus;
     Camera cam;
     playerMotor motor;
-
+    [SerializeField] public float fishingRange = 10;
     public bool fishing = false;
     bool fishingPrepared = false;
+    bool fishOnLine = false;
 
     public LayerMask movemenMask;
 
@@ -32,6 +33,8 @@ public class playercontroller : MonoBehaviour
     {
         cam = Camera.main;
         motor = GetComponent<playerMotor>();
+        rod.transform.localScale = Vector3.zero;
+        rod.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -79,10 +82,21 @@ public class playercontroller : MonoBehaviour
         {
             fishingLine.SetPosition(0, rodEndPoint.position);
             fishingLine.SetPosition(1, floatObject.transform.position);
-
+            Debug.Log("Fishinf");
             if (fishingPrepared)
             {
 
+                if (Random.Range(0, 100) <= 25 && !fishOnLine)
+                {
+                    StartCoroutine(FishOnLine(Resources.Load("", typeof(FishInfo)) as FishInfo));
+                }
+
+                //      Debug.Log("Fish prep");
+                if (Input.GetKey(KeyCode.Escape))
+                {
+                    //          Debug.Log("Escpae");
+                    StartCoroutine(StopFishing());
+                }
             }
         }
 
@@ -112,23 +126,81 @@ public class playercontroller : MonoBehaviour
         StartCoroutine(StartFish(floatStartPosition));
     }
 
-    IEnumerator StartFish(Vector3 floatStartPosition)
+    IEnumerator FishOnLine(FishInfo fishInfo)
     {
-        fishing = true;
-        float floatSpeed = 10;
-        rod.gameObject.SetActive(true);
-        floatObject.transform.position = rodEndPoint.position;
-        while (floatObject.transform.position != floatStartPosition)
+        Vector3 lineStartPosition = floatObject.transform.position;
+
+        fishOnLine = true;
+
+        while (fishing && fishingPrepared && fishOnLine)
         {
-            // floatObject.transform.position = Vector3.Lerp(floatObject.transform.position, floatStartPosition, floatSpeed * Time.deltaTime);
-            floatObject.transform.position = Vector3.MoveTowards(floatObject.transform.position, floatStartPosition, Time.deltaTime * floatSpeed);
+
+
+
+            yield return new WaitForEndOfFrame();
+
+
+        }
+    }
+
+    IEnumerator StopFishing()
+    {
+
+        ResetFishBools();
+        while (floatObject.transform.position != rodEndPoint.transform.position)
+        {
+            floatObject.transform.position = Vector3.MoveTowards(floatObject.transform.position, rodEndPoint.transform.position, 20f * Time.deltaTime);
+            fishingLine.SetPosition(0, rodEndPoint.position);
+            fishingLine.SetPosition(1, floatObject.transform.position);
             yield return new WaitForEndOfFrame();
         }
-        Debug.Log("Float at position");
-        fishingPrepared = true;
+        while (rod.transform.localScale != Vector3.zero)
+        {
+            rod.transform.localScale = Vector3.MoveTowards(rod.transform.localScale, Vector3.zero, 10f * Time.deltaTime);
+            yield return new WaitForEndOfFrame();
+        }
+        rod.SetActive(false);
 
     }
 
+    void ResetFishBools()
+    {
+        fishing = false;
+        fishingPrepared = false;
+        fishOnLine = false;
+    }
+
+
+    IEnumerator StartFish(Vector3 floatStartPosition)
+    {
+        rod.SetActive(true);
+        fishing = true;
+        float floatSpeed = 20;
+        rod.gameObject.SetActive(true);
+        floatObject.transform.position = rodEndPoint.position;
+        while (rod.transform.localScale != Vector3.one)
+        {
+            rod.transform.localScale = Vector3.MoveTowards(rod.transform.localScale, Vector3.one, 10f * Time.deltaTime);
+            yield return new WaitForEndOfFrame();
+        }
+
+
+        while (Vector3.Distance(floatObject.transform.position, floatStartPosition) > .5f)
+        {
+            // floatObject.transform.position = Vector3.Lerp(floatObject.transform.position, floatStartPosition, floatSpeed * Time.deltaTime);
+            floatObject.transform.position = Vector3.MoveTowards(floatObject.transform.position, floatStartPosition, Time.deltaTime * floatSpeed);
+
+            yield return new WaitForEndOfFrame();
+        }
+        //     Debug.Log("Float at position");
+        fishingPrepared = true;
+
+    }
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawSphere(transform.position, -fishingRange);
+    }
 
 
     void RemoveFocus()
