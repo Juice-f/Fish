@@ -20,7 +20,7 @@ public class playercontroller : MonoBehaviour
     void Update()
     {
         //if (EventSystem.current.IsPointerOverGameObject())
-          //  return;
+        //  return;
         if (Input.GetMouseButtonDown(0))
         {
             //Skjuter ut en raycast från muspositionen
@@ -51,9 +51,9 @@ public class playercontroller : MonoBehaviour
             }
         }
     }
-    void SetFocus (Interactable newFocus)
+    void SetFocus(Interactable newFocus)
     {
-        if (newFocus !=focus)
+        if (newFocus != focus)
         {
             if (focus != null)
                 focus.OndeFocused();
@@ -61,7 +61,10 @@ public class playercontroller : MonoBehaviour
 
 
             focus = newFocus;
-            motor.FollowTarget(newFocus);
+            if (newFocus.GetComponent<FishingZone>() == null)
+            {
+                motor.FollowTarget(newFocus);
+            } 
 
         }
         newFocus.OnFocused(transform);
@@ -71,11 +74,11 @@ public class playercontroller : MonoBehaviour
     {
         if (focus != null)
             focus.OndeFocused();
-        
+
         focus = null;
         motor.StopFollowingTarget();
     }
 }
-        
 
-    
+
+
