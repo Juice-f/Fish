@@ -28,8 +28,9 @@ public class Interactable : MonoBehaviour
         }
     }
 
-    public void OnFocused (Transform playerTransform)
+    public virtual void OnFocused (Transform playerTransform)
     {
+        Debug.Log("OWO");
         isfocus = true;
         player = playerTransform;
         hasInteracted = false;
@@ -49,6 +50,6 @@ public class Interactable : MonoBehaviour
 
         
         Gizmos.color = Color.black;
-        Gizmos.DrawWireSphere(interactionTransform.position, radius);
+        Gizmos.DrawSphere(interactionTransform.position, -radius);
     }
 }
