@@ -29,15 +29,16 @@ public class Fishing : Interactable
             // base.OnFocused(playerTransform);
             playerGO = playerTransform.gameObject;
             Ray rayCast = Camera.main.ScreenPointToRay(Input.mousePosition);
-            GameObject TESTcube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            //GameObject TESTcube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             RaycastHit hit;
             if (Physics.Raycast(rayCast, out hit))
             {
-                TESTcube.transform.position = hit.point;
+               // TESTcube.transform.position = hit.point;
                 playerTransform.LookAt(hit.point);
             }
 
             playerTransform.GetComponent<NavMeshAgent>().SetDestination(playerTransform.transform.position);
+            playerTransform.GetComponent<playercontroller>().StartFishing(hit.point);
 
         }
         //  fishingTargetPos = 

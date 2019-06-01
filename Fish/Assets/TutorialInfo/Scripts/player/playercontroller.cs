@@ -9,7 +9,25 @@ public class playercontroller : MonoBehaviour
     public Interactable focus;
     Camera cam;
     playerMotor motor;
+
+    public bool fishing = false;
+    bool fishingPrepared = false;
+
     public LayerMask movemenMask;
+
+
+    public Vector3 floatTargetPosition;
+
+
+    #region Fishing rod stuffs
+    [SerializeField] GameObject floatObject;
+    [SerializeField] GameObject rod;
+    [SerializeField] Transform rodEndPoint;
+    [SerializeField] LineRenderer fishingLine;
+
+    #endregion
+
+
     void Start()
     {
         cam = Camera.main;
@@ -21,35 +39,53 @@ public class playercontroller : MonoBehaviour
     {
         //if (EventSystem.current.IsPointerOverGameObject())
         //  return;
-        if (Input.GetMouseButtonDown(0))
-        {
-            //Skjuter ut en raycast från muspositionen
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, 100, movemenMask))
+
+        #region Not fishing
+        if (!fishing)
+        {
+            if (Input.GetMouseButtonDown(0))
             {
-                motor.MovetoPoint(hit.point);
+                //Skjuter ut en raycast från muspositionen
+                Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit, 100, movemenMask))
+                {
+                    motor.MovetoPoint(hit.point);
+                }
+
+                RemoveFocus();
             }
 
-            RemoveFocus();
-        }
-
-        if (Input.GetMouseButtonDown(1))
-        {
-            //Skjuter ut en raycast från muspositionen
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, 100))
+            if (Input.GetMouseButtonDown(1))
             {
-                Interactable interactable = hit.collider.GetComponent<Interactable>();
-                if (interactable != null)
+                //Skjuter ut en raycast från muspositionen
+                Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit, 100))
                 {
-                    SetFocus(interactable);
+                    Interactable interactable = hit.collider.GetComponent<Interactable>();
+                    if (interactable != null)
+                    {
+                        SetFocus(interactable);
+                    }
                 }
             }
         }
+        #endregion
+        else
+        {
+            fishingLine.SetPosition(0, rodEndPoint.position);
+            fishingLine.SetPosition(1, floatObject.transform.position);
+
+            if (fishingPrepared)
+            {
+
+            }
+        }
+
     }
     void SetFocus(Interactable newFocus)
     {
@@ -64,11 +100,36 @@ public class playercontroller : MonoBehaviour
             if (newFocus.GetComponent<FishingZone>() == null)
             {
                 motor.FollowTarget(newFocus);
-            } 
+            }
 
         }
         newFocus.OnFocused(transform);
     }
+
+
+    public void StartFishing(Vector3 floatStartPosition)
+    {
+        StartCoroutine(StartFish(floatStartPosition));
+    }
+
+    IEnumerator StartFish(Vector3 floatStartPosition)
+    {
+        fishing = true;
+        float floatSpeed = 10;
+        rod.gameObject.SetActive(true);
+        floatObject.transform.position = rodEndPoint.position;
+        while (floatObject.transform.position != floatStartPosition)
+        {
+            // floatObject.transform.position = Vector3.Lerp(floatObject.transform.position, floatStartPosition, floatSpeed * Time.deltaTime);
+            floatObject.transform.position = Vector3.MoveTowards(floatObject.transform.position, floatStartPosition, Time.deltaTime * floatSpeed);
+            yield return new WaitForEndOfFrame();
+        }
+        Debug.Log("Float at position");
+        fishingPrepared = true;
+
+    }
+
+
 
     void RemoveFocus()
     {
