@@ -8,7 +8,7 @@ public class playerMotor : MonoBehaviour
 {
     Transform target;
     NavMeshAgent agent;
-    
+    [SerializeField] Animator animator;
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -16,11 +16,19 @@ public class playerMotor : MonoBehaviour
 
     private void Update()
     {
-        if(target != null)
+        if (GetComponent<NavMeshAgent>().velocity != Vector3.zero)
+        {
+            animator.SetBool("Idle", false);
+        }
+        else animator.SetBool("Idle", true);
+        if (target != null)
         {
             agent.SetDestination(target.position);
             FaceTarget();
         }
+        Debug.Log(GetComponent<NavMeshAgent>().velocity != Vector3.zero);
+
+
     }
     public void MovetoPoint (Vector3 point)
     {
