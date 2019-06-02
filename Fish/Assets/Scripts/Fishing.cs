@@ -31,9 +31,9 @@ public class Fishing : Interactable
             Ray rayCast = Camera.main.ScreenPointToRay(Input.mousePosition);
             //GameObject TESTcube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             RaycastHit hit;
-            if (Physics.Raycast(rayCast, out hit) && Vector3.Distance(playerTransform.position, hit.point) <= playerTransform.GetComponent<playercontroller>().fishingRange)
+            if (Physics.Raycast(rayCast, out hit) && Vector3.Distance(new Vector3(playerTransform.position.x, 0, playerTransform.position.z), new Vector3(hit.point.x, 0, hit.point.z)) <= playerTransform.GetComponent<playercontroller>().fishingRange)
             {
-               // TESTcube.transform.position = hit.point;
+                // TESTcube.transform.position = hit.point;
                 playerTransform.LookAt(hit.point);
                 playerTransform.GetComponent<NavMeshAgent>().SetDestination(playerTransform.transform.position);
                 playerTransform.GetComponent<playercontroller>().StartFishing(hit.point);
