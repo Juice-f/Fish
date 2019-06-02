@@ -12,7 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dece852de3060f4c9b776256cc7761f, type: 3}
   m_Name: Fishy
   m_EditorClassIdentifier: 
-  catchRate: 0.1
+  probabilityWeight: 0.1
   fishname: John Standardfish
   caughtObject: {fileID: 5323689253796121243, guid: 18e1da485a775e44c91907030813c3c5,
     type: 3}
+  passiveDrain: 21.85
+  diveAttackDamage:
+    stmnDamage: 10
+    lineDamage: 10
+  yeetAttackDamage:
+    stmnDamage: 1
+    lineDamage: 1
+  maxFishStamina: 50
+  song: {fileID: 8300000, guid: 9db2722b782048944b314fe5e8957279, type: 3}
