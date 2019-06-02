@@ -16,12 +16,13 @@ MonoBehaviour:
   fishname: John Standardfish
   caughtObject: {fileID: 5323689253796121243, guid: 18e1da485a775e44c91907030813c3c5,
     type: 3}
-  passiveDrain: 21.85
+  passiveDrain: 8
   diveAttackDamage:
     stmnDamage: 10
     lineDamage: 10
   yeetAttackDamage:
-    stmnDamage: 1
-    lineDamage: 1
+    stmnDamage: 5
+    lineDamage: 20
   maxFishStamina: 50
-  song: {fileID: 8300000, guid: 9db2722b782048944b314fe5e8957279, type: 3}
+  song: {fileID: 8300000, guid: 6bc8dde2292bc4b4d8f67fc8d746cfb1, type: 3}
+  fishRegen: 6
