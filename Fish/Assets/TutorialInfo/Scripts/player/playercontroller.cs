@@ -29,7 +29,7 @@ public class playercontroller : MonoBehaviour
     [SerializeField] Transform lineEndPoint;
     [SerializeField] GameObject exclamationPoint;
     [SerializeField] ParticleSystem splashSystem;
-
+    [SerializeField] float playerHeldStaminaDrain = 10;
 
     #endregion
     #region Fishing Ui
@@ -39,14 +39,25 @@ public class playercontroller : MonoBehaviour
     #endregion
 
     #region Player Fishing Stats
-
+    [SerializeField] float staminaRegenRate = 5;
     [SerializeField] float playerMaxStamina = 100;
     [SerializeField] float playerMaxLineStr = 100;
     [SerializeField] float playerStamina;
     [SerializeField] float playerLineStr;
-
-    #endregion
-    [SerializeField] FishInfo debugFish;
+    [SerializeField] float lineDrain = 5;
+    float PlayerStamina
+    {
+        get => playerStamina;
+        set
+        {
+            if (value < 0) { playerStamina = 0; return; }
+            if (value > playerMaxStamina) { playerStamina = playerMaxStamina; return; }
+            playerStamina = value;
+        }
+    }
+        #endregion
+        [SerializeField]
+        FishInfo debugFish;
 
     void Start()
     {
@@ -164,11 +175,12 @@ public class playercontroller : MonoBehaviour
         fishOnLine = true;
         floatAnimator.SetBool("Bounce", true);
         bool playerReacted = false;
-        bool fishMovingRight = false;
-        bool fishMoving = false;
+        //bool fishMovingRight = false;
+        //bool fishMoving = false;
+        int fishMoveDir = 0;
         float fishStamina = _fishInfo.maxFishStamina;
         int playerHeldDir = 0;
-        float dirChangeTime = 2;
+        float dirChangeTime = 6;
         float timeTilDirChange = 0;
         float timerVal1 = 0;
 
@@ -192,21 +204,63 @@ public class playercontroller : MonoBehaviour
                 exclamationPoint.SetActive(false);
             }
 
-
+            
             if (playerReacted)
             {
+                //Debug.LogFormat("Fish Moving: {0}, Fish Moving Right: {1}, Player holding: {2}, Time Left: {3} / {4}", fishMoving, fishMovingRight, playerHeldDir, timerVal1, timeTilDirChange);
+                Debug.LogFormat("Player held dir: {0} Fish move direction: {1} Time out of: {2} / {3}", playerHeldDir, fishMoveDir, timerVal1, timeTilDirChange);
                 if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D)) { playerHeldDir = -1; } else if (!Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D)) playerHeldDir = 1; else playerHeldDir = 0;
-                playerStamina -= _fishInfo.passiveDrain * Time.deltaTime;
-                if (fishMovingRight && fishMoving)
-                { floatObject.transform.position = Vector3.MoveTowards(floatObject.transform.position, floatTargetPosition + new Vector3(.5f, 0, 0), 3 * Time.deltaTime); }
-                else if (!fishMovingRight && fishMoving)
-                { floatObject.transform.position = Vector3.MoveTowards(floatObject.transform.position, floatTargetPosition + new Vector3(.5f, 0, 0), 3 * Time.deltaTime); }
-                else
-                { floatObject.transform.position = Vector3.MoveTowards(floatObject.transform.position, floatTargetPosition, 3 * Time.deltaTime); }
+             //   PlayerStamina -= _fishInfo.passiveDrain * Time.deltaTime;
+
+                switch (fishMoveDir) 
+                {
+                    case (0):
+                        if (playerHeldDir != fishMoveDir) { fishStamina -= playerHeldStaminaDrain * Time.deltaTime; PlayerStamina -= _fishInfo.passiveDrain * Time.deltaTime; } else PlayerStamina += staminaRegenRate * Time.deltaTime;
+                        floatObject.transform.position = Vector3.MoveTowards(floatObject.transform.position, lineStartPosition, .5f);
+
+                        break;
+                    case (-1):
+                        if(playerHeldDir == fishMoveDir)
+                        {
+                            PlayerStamina += staminaRegenRate * Time.deltaTime;
+                        } else if (playerHeldDir == 1) { PlayerStamina -= _fishInfo.passiveDrain * Time.deltaTime; } else
+                        {
+                            fishStamina -= playerHeldStaminaDrain * Time.deltaTime;
+                            PlayerStamina -= _fishInfo.passiveDrain * Time.deltaTime;
+                        }
+                        floatObject.transform.position = Vector3.MoveTowards(floatObject.transform.position, lineStartPosition + new Vector3(-4f,0,0), .5f);
+
+                        break;
+                    case (1):
+                        if (playerHeldDir == fishMoveDir)
+                        {
+                            PlayerStamina += staminaRegenRate * Time.deltaTime;
+                        }
+                        else if (playerHeldDir == -1) { PlayerStamina -= _fishInfo.passiveDrain * Time.deltaTime; }
+                        else
+                        {
+                            fishStamina -= playerHeldStaminaDrain * Time.deltaTime;
+                            PlayerStamina -= _fishInfo.passiveDrain * Time.deltaTime;
+                        }
+                        floatObject.transform.position = Vector3.MoveTowards(floatObject.transform.position, lineStartPosition + new Vector3(4f, 0, 0), .5f);
+                        break;
+
+
+                }
+
+
                 timerVal1 += 1 * Time.deltaTime;
                 if (timerVal1 >= timeTilDirChange)
                 {
+                    timerVal1 = 0;
+                    timeTilDirChange = Random.Range(1, dirChangeTime);
+                    int rnd = Random.Range(-1, 2);
+                    fishMoveDir = rnd;
 
+
+
+
+                    //if (rnd == 1) { fishMovingRight = !fishMovingRight; }
                 }
 
 
@@ -216,6 +270,11 @@ public class playercontroller : MonoBehaviour
 
 
         }
+    }
+
+    public void ResetStamina()
+    {
+        PlayerStamina = playerMaxStamina;
     }
 
     IEnumerator StopFishing()
