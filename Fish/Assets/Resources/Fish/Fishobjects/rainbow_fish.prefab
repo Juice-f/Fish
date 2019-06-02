@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 5561349426305759274, guid: 986ac1c29eb3ce14b80befe3bfefdc1c, type: 3}
+  - {fileID: 2100000, guid: b9b157ab3deb42d4ab4142124be97f4e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -125,3 +125,4 @@ MonoBehaviour:
   interactionTransform: {fileID: 6208619553430697695}
   player: {fileID: 0}
   fisk: {fileID: 0}
+  staminaVal: 50

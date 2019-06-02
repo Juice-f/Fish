@@ -27,3 +27,4 @@ MonoBehaviour:
   song: {fileID: 0}
   fishRegen: 1
   scoreValue: 550
+  staminaReward: 30

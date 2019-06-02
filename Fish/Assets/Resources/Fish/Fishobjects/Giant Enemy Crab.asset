@@ -27,3 +27,4 @@ MonoBehaviour:
   song: {fileID: 8300000, guid: d660f08199188ce41a4263fbfbfb2c6f, type: 3}
   fishRegen: 1
   scoreValue: 99999
+  staminaReward: 0

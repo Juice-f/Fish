@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8287511922101837797}
   - component: {fileID: 8287511922101837799}
   m_Layer: 0
-  m_Name: creb 1
+  m_Name: Big Crab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -126,3 +126,4 @@ MonoBehaviour:
   interactionTransform: {fileID: 3925341044413618903}
   player: {fileID: 0}
   fisk: {fileID: 0}
+  staminaVal: 300
