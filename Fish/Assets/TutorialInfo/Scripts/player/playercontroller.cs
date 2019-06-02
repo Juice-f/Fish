@@ -18,7 +18,7 @@ public class playercontroller : MonoBehaviour
     bool playerReacted = false;
     [SerializeField]
     FishInfo[] fishes;
-
+    public int score = 0;
     float fishStamina;
     float FishStamina
     {
@@ -463,7 +463,7 @@ public class playercontroller : MonoBehaviour
         {
             fishObject.AddComponent<Rigidbody>();
         }
-
+        score += fishInfo.scoreValue;
 
         StartCoroutine(StopFishing());
 
