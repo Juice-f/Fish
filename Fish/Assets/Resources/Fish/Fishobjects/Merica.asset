@@ -25,4 +25,5 @@ MonoBehaviour:
     lineDamage: 1
   maxFishStamina: 100
   song: {fileID: 0}
-  fishRegen: 1
+  fishRegen: 3
+  scoreValue: 100
