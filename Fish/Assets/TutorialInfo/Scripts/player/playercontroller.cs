@@ -364,7 +364,7 @@ public class playercontroller : MonoBehaviour
                 }
                 if (Input.GetKey(KeyCode.S) && !yeeting)
                 {
-                    PlayerStamina -= 10 * Time.deltaTime;
+                    PlayerStamina -= 40 * Time.deltaTime;
                 }
 
                 if (yeeting)
