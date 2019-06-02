@@ -192,8 +192,8 @@ public class playercontroller : MonoBehaviour
     }
     private void LateUpdate()
     {
-        if (fishing)
-            Camera.main.GetComponent<CameraController>().cameraRotation = Mathf.LerpAngle(Camera.main.GetComponent<CameraController>().cameraRotation, transform.eulerAngles.y, 3 * Time.deltaTime);
+        //if (fishing)
+        //    Camera.main.GetComponent<CameraController>().cameraRotation = Mathf.LerpAngle(Camera.main.GetComponent<CameraController>().cameraRotation, transform.eulerAngles.y, 3 * Time.deltaTime);
 
         if (!playerReacted && playerStamina >= playerMaxStamina)
         {
@@ -364,7 +364,7 @@ public class playercontroller : MonoBehaviour
                 }
                 if (Input.GetKey(KeyCode.S) && !yeeting)
                 {
-                    PlayerStamina -= 40 * Time.deltaTime;
+                    PlayerStamina -= 10 * Time.deltaTime;
                 }
 
                 if (yeeting)
