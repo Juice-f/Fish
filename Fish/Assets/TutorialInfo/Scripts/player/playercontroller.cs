@@ -104,6 +104,7 @@ public class playercontroller : MonoBehaviour
         #region Not fishing
         if (!fishing)
         {
+            PlayerStamina += staminaRegenRate * Time.deltaTime;
             if (Input.GetMouseButtonDown(0))
             {
                 //Skjuter ut en raycast från muspositionen
@@ -414,9 +415,10 @@ public class playercontroller : MonoBehaviour
         }
     }
 
-    public void ResetStamina()
+    public void ResetLines()
     {
         PlayerStamina = playerMaxStamina;
+        playerLineStr = playerMaxLineStr;
     }
 
     IEnumerator StopFishing()
@@ -450,8 +452,17 @@ public class playercontroller : MonoBehaviour
     public void CatchFish(Vector3 floatPos)
     {
         Debug.Log("FISH CAUTH!");
-        GameObject fishObject = Instantiate(fishInfo.caughtObject);
-        fishObject.transform.position = floatPos;
+        GameObject fishObject;
+        if (fishInfo.caughtObject != null)
+        {
+            fishObject = Instantiate(fishInfo.caughtObject);
+        }
+        else fishObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        fishObject.transform.position = transform.position + new Vector3(0, 5, 0); 
+        if (fishObject.GetComponent<Rigidbody>() == null)
+        {
+            fishObject.AddComponent<Rigidbody>();
+        }
 
 
         StartCoroutine(StopFishing());

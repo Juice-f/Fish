@@ -30,7 +30,7 @@ public class EndGame : Interactable
         Black.SetActive(true);
         Cursor.lockState = CursorLockMode.Locked;
         StartCoroutine(Timer());
-        player.GetComponent<playercontroller>().ResetStamina();
+        player.GetComponent<playercontroller>().ResetLines();
         
     }
 
