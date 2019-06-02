@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   probabilityWeight: 0.1
   fishname: "GammelG\xE4ddan"
-  caughtObject: {fileID: -927199367670048503, guid: 4486e7d138f6ad247a023609cdffc173,
+  caughtObject: {fileID: 2427554373303552143, guid: 72413b8a0ed4f8c4dbb9b833e46d5cba,
     type: 3}
   passiveDrain: 2
   diveAttackDamage:
@@ -26,3 +26,4 @@ MonoBehaviour:
   maxFishStamina: 400
   song: {fileID: 0}
   fishRegen: 1
+  scoreValue: 600
