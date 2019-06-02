@@ -164,8 +164,14 @@ public class playercontroller : MonoBehaviour
         fishOnLine = true;
         floatAnimator.SetBool("Bounce", true);
         bool playerReacted = false;
-
+        bool fishMovingRight = false;
+        bool fishMoving = false;
         float fishStamina = _fishInfo.maxFishStamina;
+        int playerHeldDir = 0;
+        float dirChangeTime = 2;
+        float timeTilDirChange = 0;
+        float timerVal1 = 0;
+
 
         while (fishing && fishingPrepared && fishOnLine)
         {
@@ -173,7 +179,8 @@ public class playercontroller : MonoBehaviour
             if (Input.GetKey(KeyCode.Space) && !playerReacted)
             {
                 Debug.Log("!");
-
+                Camera.main.GetComponent<AudioSource>().clip = _fishInfo.song;
+                Camera.main.GetComponent<AudioSource>().Play(0);
                 exclamationPoint.SetActive(true);
                 exclamationPoint.GetComponent<Animator>().Play("Expoint", 0);
 
@@ -188,9 +195,21 @@ public class playercontroller : MonoBehaviour
 
             if (playerReacted)
             {
+                if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D)) { playerHeldDir = -1; } else if (!Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D)) playerHeldDir = 1; else playerHeldDir = 0;
                 playerStamina -= _fishInfo.passiveDrain * Time.deltaTime;
+                if (fishMovingRight && fishMoving)
+                { floatObject.transform.position = Vector3.MoveTowards(floatObject.transform.position, floatTargetPosition + new Vector3(.5f, 0, 0), 3 * Time.deltaTime); }
+                else if (!fishMovingRight && fishMoving)
+                { floatObject.transform.position = Vector3.MoveTowards(floatObject.transform.position, floatTargetPosition + new Vector3(.5f, 0, 0), 3 * Time.deltaTime); }
+                else
+                { floatObject.transform.position = Vector3.MoveTowards(floatObject.transform.position, floatTargetPosition, 3 * Time.deltaTime); }
+                timerVal1 += 1 * Time.deltaTime;
+                if (timerVal1 >= timeTilDirChange)
+                {
 
-                    
+                }
+
+
             }
 
             yield return new WaitForEndOfFrame();
@@ -201,6 +220,7 @@ public class playercontroller : MonoBehaviour
 
     IEnumerator StopFishing()
     {
+        Camera.main.GetComponent<AudioSource>().Stop();
         splashSystem.gameObject.SetActive(false);
         ResetFishBools();
         while (floatObject.transform.position != rodEndPoint.transform.position)
@@ -221,7 +241,7 @@ public class playercontroller : MonoBehaviour
 
     void ResetFishBools()
     {
-        
+
         fishing = false;
         fishingPrepared = false;
         fishOnLine = false;
