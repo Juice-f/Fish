@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   probabilityWeight: 0.1
   fishname: Just regular fish
-  caughtObject: {fileID: 0}
+  caughtObject: {fileID: 6209692413316115587, guid: b4eeaa8e9f4e54d49a9fca9083737fae,
+    type: 3}
   passiveDrain: 3
   diveAttackDamage:
     stmnDamage: 0
@@ -26,3 +27,4 @@ MonoBehaviour:
   song: {fileID: 8300000, guid: 6862259beb5d1d944b11bf5cecf71176, type: 3}
   fishRegen: 1
   scoreValue: 0
+  staminaReward: 0
