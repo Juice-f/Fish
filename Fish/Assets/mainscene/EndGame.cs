@@ -7,12 +7,14 @@ public class EndGame : Interactable
 {
     [SerializeField]
     public GameObject Black;
+    public playercontroller player;
     
     public bool Fadeout = false;
 
     public void Start()
     {
         Black.SetActive(false);
+        player = FindObjectOfType<playercontroller>();
     }
 
     public override void Interact()
@@ -28,7 +30,7 @@ public class EndGame : Interactable
         Black.SetActive(true);
         Cursor.lockState = CursorLockMode.Locked;
         StartCoroutine(Timer());
-        GetComponent<playercontroller>.resetStamina();
+        player.GetComponent<playercontroller>().ResetStamina();
         
     }
 
