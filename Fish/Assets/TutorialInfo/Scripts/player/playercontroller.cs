@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
+using UnityEngine.UI;
 [RequireComponent(typeof(playerMotor))]
 public class playercontroller : MonoBehaviour
 {
@@ -27,6 +27,23 @@ public class playercontroller : MonoBehaviour
     [SerializeField] LineRenderer fishingLine;
     [SerializeField] Animator floatAnimator;
     [SerializeField] Transform lineEndPoint;
+    [SerializeField] GameObject exclamationPoint;
+    [SerializeField] ParticleSystem splashSystem;
+
+
+    #endregion
+    #region Fishing Ui
+    [SerializeField] Graphic playerStaminaBar;
+    [SerializeField] Graphic playerLineStrBar;
+
+    #endregion
+
+    #region Player Fishing Stats
+
+    [SerializeField] float playerMaxStamina = 100;
+    [SerializeField] float playerMaxLineStr = 100;
+    [SerializeField] float playerStamina;
+    [SerializeField] float playerLineStr;
 
     #endregion
 
@@ -37,6 +54,18 @@ public class playercontroller : MonoBehaviour
         motor = GetComponent<playerMotor>();
         rod.transform.localScale = Vector3.zero;
         rod.gameObject.SetActive(false);
+
+        playerStamina = playerMaxStamina;
+        playerLineStr = playerMaxLineStr;
+
+    }
+
+    void UpdateBars()
+    {
+        float currentStm = playerStamina / playerMaxStamina;
+        playerStaminaBar.rectTransform.localScale = new Vector3(currentStm, 1, 1);
+        float currentLineStr = playerLineStr / playerMaxLineStr;
+        playerLineStrBar.rectTransform.localEulerAngles = new Vector3(currentLineStr, 1, 1);
     }
 
     // Update is called once per frame
@@ -44,7 +73,7 @@ public class playercontroller : MonoBehaviour
     {
         //if (EventSystem.current.IsPointerOverGameObject())
         //  return;
-
+        UpdateBars();
 
         #region Not fishing
         if (!fishing)
@@ -134,10 +163,25 @@ public class playercontroller : MonoBehaviour
         Debug.Log("HOOKED");
         fishOnLine = true;
         floatAnimator.SetBool("Bounce", true);
+        bool playerReacted = false;
+
         while (fishing && fishingPrepared && fishOnLine)
         {
 
+            if (Input.GetKey(KeyCode.Space) && !playerReacted)
+            {
+                Debug.Log("!");
 
+                exclamationPoint.SetActive(true);
+                exclamationPoint.GetComponent<Animator>().Play("Expoint", 0);
+
+
+                playerReacted = true;
+                splashSystem.gameObject.SetActive(true);
+                floatAnimator.SetBool("Bounce", false);
+                yield return new WaitForSeconds(1);
+                exclamationPoint.SetActive(false);
+            }
 
             yield return new WaitForEndOfFrame();
 
@@ -147,7 +191,7 @@ public class playercontroller : MonoBehaviour
 
     IEnumerator StopFishing()
     {
-
+        splashSystem.gameObject.SetActive(false);
         ResetFishBools();
         while (floatObject.transform.position != rodEndPoint.transform.position)
         {
