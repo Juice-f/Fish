@@ -56,8 +56,8 @@ public class playercontroller : MonoBehaviour
     float fishTimer = 0;
     #region Player Fishing Stats
     [SerializeField] float staminaRegenRate = 5;
-    [SerializeField] float playerMaxStamina = 100;
-    [SerializeField] float playerMaxLineStr = 100;
+    [SerializeField] public float playerMaxStamina = 100;
+    [SerializeField] public float playerMaxLineStr = 100;
     [SerializeField] float playerStamina;
     [SerializeField] float playerLineStr;
     [SerializeField] float lineDrain = 5;
@@ -192,8 +192,8 @@ public class playercontroller : MonoBehaviour
     }
     private void LateUpdate()
     {
-        if (fishing)
-            Camera.main.GetComponent<CameraController>().cameraRotation = Mathf.LerpAngle(Camera.main.GetComponent<CameraController>().cameraRotation, transform.eulerAngles.y, 3 * Time.deltaTime);
+        //if (fishing)
+        //    Camera.main.GetComponent<CameraController>().cameraRotation = Mathf.LerpAngle(Camera.main.GetComponent<CameraController>().cameraRotation, transform.eulerAngles.y, 3 * Time.deltaTime);
 
         if (!playerReacted && playerStamina >= playerMaxStamina)
         {
@@ -364,7 +364,7 @@ public class playercontroller : MonoBehaviour
                 }
                 if (Input.GetKey(KeyCode.S) && !yeeting)
                 {
-                    PlayerStamina -= 40 * Time.deltaTime;
+                    PlayerStamina -= 10 * Time.deltaTime;
                 }
 
                 if (yeeting)

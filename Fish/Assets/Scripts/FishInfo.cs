@@ -14,6 +14,7 @@ public class FishInfo : ScriptableObject
     public AudioClip song;
     public float fishRegen = 1;
     public int scoreValue = 5;
+    public float staminaReward = 0;
 }
 [System.Serializable]
 public class FishAttackDamage
