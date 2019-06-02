@@ -6,7 +6,7 @@ public class FishUp : Interactable
 {
     public playercontroller player;
     public GameObject fisk;
-    
+    public float staminaVal;
 
     public void Start()
     {

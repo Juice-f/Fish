@@ -109,6 +109,7 @@ MonoBehaviour:
   interactionTransform: {fileID: 3739558133237157462}
   player: {fileID: 0}
   fisk: {fileID: 0}
+  staminaVal: 30
 --- !u!54 &3739558133237157451
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -10,21 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0dece852de3060f4c9b776256cc7761f, type: 3}
-  m_Name: Giant Enemy Crab
+  m_Name: Swedish Fish Citron
   m_EditorClassIdentifier: 
   probabilityWeight: 0.1
-  fishname: Giant Enemy Crab
-  caughtObject: {fileID: 9786997830723780, guid: 43ac54280f4a71d4083acf596e475f8f,
-    type: 3}
-  passiveDrain: 0
+  fishname: Swedish Fish Citron
+  caughtObject: {fileID: 0}
+  passiveDrain: 3
   diveAttackDamage:
-    stmnDamage: 100
-    lineDamage: 100
+    stmnDamage: 1
+    lineDamage: 1
   yeetAttackDamage:
-    stmnDamage: 100
-    lineDamage: 100
-  maxFishStamina: 900
-  song: {fileID: 8300000, guid: d660f08199188ce41a4263fbfbfb2c6f, type: 3}
+    stmnDamage: 1
+    lineDamage: 1
+  maxFishStamina: 50
+  song: {fileID: 0}
   fishRegen: 1
-  scoreValue: 99999
-  staminaReward: 0
+  scoreValue: 20
+  staminaReward: 20
