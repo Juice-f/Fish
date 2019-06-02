@@ -45,6 +45,7 @@ public class playercontroller : MonoBehaviour
     [SerializeField] GameObject exclamationPoint;
     [SerializeField] ParticleSystem splashSystem;
     [SerializeField] float playerHeldStaminaDrain = 10;
+    [SerializeField] Text scoreText;
 
     #endregion
     #region Fishing Ui
@@ -100,7 +101,7 @@ public class playercontroller : MonoBehaviour
         //if (EventSystem.current.IsPointerOverGameObject())
         //  return;
         UpdateBars();
-
+        scoreText.text = "Score: " + score;
         #region Not fishing
         if (!fishing)
         {
@@ -338,6 +339,8 @@ public class playercontroller : MonoBehaviour
                     int rnd = 0;// Random.Range(0, 2);
                     if (!yeeting && !diving)
                     {
+
+
                         switch (rnd)
                         {
                             case (0):
@@ -359,6 +362,11 @@ public class playercontroller : MonoBehaviour
                     }
 
                 }
+                if (Input.GetKey(KeyCode.S) && !yeeting)
+                {
+                    PlayerStamina -= 10 * Time.deltaTime;
+                }
+
                 if (yeeting)
                 {
                     //                    Debug.Log("YEETING");
