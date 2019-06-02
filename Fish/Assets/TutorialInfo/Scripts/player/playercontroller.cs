@@ -16,6 +16,9 @@ public class playercontroller : MonoBehaviour
     FishInfo fishInfo;
     public LayerMask movemenMask;
     bool playerReacted = false;
+    [SerializeField]
+    FishInfo[] fishes;
+
     float fishStamina;
     float FishStamina
     {
@@ -49,7 +52,7 @@ public class playercontroller : MonoBehaviour
     [SerializeField] Graphic playerLineStrBar;
     [SerializeField] Graphic fishBar;
     #endregion
-
+    float fishTimer = 0;
     #region Player Fishing Stats
     [SerializeField] float staminaRegenRate = 5;
     [SerializeField] float playerMaxStamina = 100;
@@ -140,11 +143,17 @@ public class playercontroller : MonoBehaviour
             if (fishingPrepared)
             {
                 Debug.Log("prepared");
-                if (Random.Range(0, 100) <= 25 && !fishOnLine)
+                fishTimer += Time.deltaTime;
+                if (fishTimer >= 3)
                 {
-                    StartCoroutine(FishOnLine(debugFish));
-                }
+                    fishTimer = 0;
+                    if (Random.Range(0, 100) <= 25 && !fishOnLine)
+                    {
 
+
+                        StartCoroutine(FishOnLine(fishes[Random.Range(0, fishes.Length)]));
+                    }
+                }
                 //      Debug.Log("Fish prep");
                 if (Input.GetKey(KeyCode.Escape))
                 {
@@ -214,7 +223,7 @@ public class playercontroller : MonoBehaviour
         Debug.Log("HOOKED");
         fishOnLine = true;
         floatAnimator.SetBool("Bounce", true);
-         playerReacted = false;
+        playerReacted = false;
         //bool fishMovingRight = false;
         //bool fishMoving = false;
         int fishMoveDir = 0;
