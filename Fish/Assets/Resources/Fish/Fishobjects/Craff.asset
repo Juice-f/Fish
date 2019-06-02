@@ -24,6 +24,7 @@ MonoBehaviour:
     stmnDamage: 2
     lineDamage: 2
   maxFishStamina: 90
-  song: {fileID: 0}
+  song: {fileID: 8300000, guid: d660f08199188ce41a4263fbfbfb2c6f, type: 3}
   fishRegen: 4
   scoreValue: 5
+  staminaReward: 0
