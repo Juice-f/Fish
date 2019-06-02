@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0dece852de3060f4c9b776256cc7761f, type: 3}
-  m_Name: Swedish Fish Citron
+  m_Name: Mew Fish
   m_EditorClassIdentifier: 
   probabilityWeight: 0.1
-  fishname: Swedish FIsh
-  caughtObject: {fileID: 4779135916430270660, guid: 38dfdd9c9fd1ca742a90153675cdfb9c,
+  fishname: Mew Fish
+  caughtObject: {fileID: 4293685932364598952, guid: e20d777f8985eb646802ccb7b2d63711,
     type: 3}
-  passiveDrain: 3
+  passiveDrain: 2
   diveAttackDamage:
     stmnDamage: 1
     lineDamage: 1
   yeetAttackDamage:
     stmnDamage: 1
     lineDamage: 1
-  maxFishStamina: 120
+  maxFishStamina: 240
   song: {fileID: 0}
   fishRegen: 1
-  scoreValue: 30
+  scoreValue: 70
   staminaReward: 20
