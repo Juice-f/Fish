@@ -6,7 +6,7 @@ public class CameraController : MonoBehaviour
 {
     public Transform target;
     public Vector3 offset;
-
+    [SerializeField] public float cameraRotation = 0;
 
     private void Update()
     {
@@ -17,7 +17,8 @@ public class CameraController : MonoBehaviour
     }
     void LateUpdate()
     {
-        transform.position = target.position + offset;
+        transform.position = target.position + Quaternion.Euler(0, cameraRotation, 0) * offset;
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, cameraRotation, transform.eulerAngles.z);
      //   transform.LookAt(target.position + Vector3.up * pitch);
 
 
@@ -25,7 +26,8 @@ public class CameraController : MonoBehaviour
     }
     private void OnValidate()
     {
-        transform.position = target.transform.position + offset;
+        transform.position = target.transform.position + Quaternion.Euler(0,cameraRotation,0) *  offset;
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, cameraRotation, transform.eulerAngles.z);
     }
     private void OnDrawGizmosSelected()
     {

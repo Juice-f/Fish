@@ -13,9 +13,21 @@ public class playercontroller : MonoBehaviour
     public bool fishing = false;
     bool fishingPrepared = false;
     bool fishOnLine = false;
-
+    FishInfo fishInfo;
     public LayerMask movemenMask;
+    bool playerReacted = false;
+    float fishStamina;
+    float FishStamina
+    {
+        get => fishStamina;
 
+        set
+        {
+            if (value < 0) { fishStamina = 0; return; }
+            if (value > fishInfo.maxFishStamina) { fishStamina = fishInfo.maxFishStamina; return; }
+            fishStamina = value;
+        }
+    }
 
     public Vector3 floatTargetPosition;
 
@@ -35,7 +47,7 @@ public class playercontroller : MonoBehaviour
     #region Fishing Ui
     [SerializeField] Graphic playerStaminaBar;
     [SerializeField] Graphic playerLineStrBar;
-
+    [SerializeField] Graphic fishBar;
     #endregion
 
     #region Player Fishing Stats
@@ -55,9 +67,9 @@ public class playercontroller : MonoBehaviour
             playerStamina = value;
         }
     }
-        #endregion
-        [SerializeField]
-        FishInfo debugFish;
+    #endregion
+    [SerializeField]
+    FishInfo debugFish;
 
     void Start()
     {
@@ -167,23 +179,63 @@ public class playercontroller : MonoBehaviour
     {
         StartCoroutine(StartFish(floatStartPosition));
     }
+    private void LateUpdate()
+    {
+        if (fishing)
+            Camera.main.GetComponent<CameraController>().cameraRotation = Mathf.LerpAngle(Camera.main.GetComponent<CameraController>().cameraRotation, transform.eulerAngles.y, 3 * Time.deltaTime);
 
+        if (!playerReacted && playerStamina >= playerMaxStamina)
+        {
+            playerStaminaBar.transform.parent.gameObject.SetActive(false);
+        }
+        else playerStaminaBar.transform.parent.gameObject.SetActive(true);
+
+        if (!playerReacted && playerLineStr >= playerMaxLineStr)
+        {
+            playerLineStrBar.transform.parent.gameObject.SetActive(false);
+        }
+        else playerLineStrBar.transform.parent.gameObject.SetActive(true);
+
+        if (!playerReacted)
+        {
+            fishBar.gameObject.SetActive(false);
+            fishBar.transform.parent.gameObject.SetActive(false);
+        }
+        else
+        {
+            fishBar.gameObject.SetActive(true);
+            fishBar.transform.parent.gameObject.SetActive(true);
+        }
+    }
     IEnumerator FishOnLine(FishInfo _fishInfo)
     {
+        fishInfo = _fishInfo;
         Vector3 lineStartPosition = floatObject.transform.position;
         Debug.Log("HOOKED");
         fishOnLine = true;
         floatAnimator.SetBool("Bounce", true);
-        bool playerReacted = false;
+         playerReacted = false;
         //bool fishMovingRight = false;
         //bool fishMoving = false;
         int fishMoveDir = 0;
-        float fishStamina = _fishInfo.maxFishStamina;
+        fishStamina = fishInfo.maxFishStamina;
         int playerHeldDir = 0;
         float dirChangeTime = 6;
         float timeTilDirChange = 0;
         float timerVal1 = 0;
+        float wrongMod = 5;
 
+        float timeBetweenAttacks = 0;
+        float actualtTimeBetweenAttacks = 3;
+        float attackTimer = 0;
+
+        float yeetWindow = .5f;
+        float diveWindow = 3;
+
+
+        float attackDurationTimer = 0;
+        bool yeeting = false;
+        bool diving = false;
 
         while (fishing && fishingPrepared && fishOnLine)
         {
@@ -191,7 +243,7 @@ public class playercontroller : MonoBehaviour
             if (Input.GetKey(KeyCode.Space) && !playerReacted)
             {
                 Debug.Log("!");
-                Camera.main.GetComponent<AudioSource>().clip = _fishInfo.song;
+                Camera.main.GetComponent<AudioSource>().clip = fishInfo.song;
                 Camera.main.GetComponent<AudioSource>().Play(0);
                 exclamationPoint.SetActive(true);
                 exclamationPoint.GetComponent<Animator>().Play("Expoint", 0);
@@ -204,50 +256,125 @@ public class playercontroller : MonoBehaviour
                 exclamationPoint.SetActive(false);
             }
 
-            
+
             if (playerReacted)
             {
+                fishBar.rectTransform.localScale = new Vector3(FishStamina / fishInfo.maxFishStamina, 1, 1);
                 //Debug.LogFormat("Fish Moving: {0}, Fish Moving Right: {1}, Player holding: {2}, Time Left: {3} / {4}", fishMoving, fishMovingRight, playerHeldDir, timerVal1, timeTilDirChange);
-                Debug.LogFormat("Player held dir: {0} Fish move direction: {1} Time out of: {2} / {3}", playerHeldDir, fishMoveDir, timerVal1, timeTilDirChange);
+                //  Debug.LogFormat("Player held dir: {0} Fish move direction: {1} Time out of: {2} / {3}", playerHeldDir, fishMoveDir, timerVal1, timeTilDirChange);
                 if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D)) { playerHeldDir = -1; } else if (!Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D)) playerHeldDir = 1; else playerHeldDir = 0;
-             //   PlayerStamina -= _fishInfo.passiveDrain * Time.deltaTime;
+                //   PlayerStamina -= _fishInfo.passiveDrain * Time.deltaTime;
 
-                switch (fishMoveDir) 
+                switch (fishMoveDir)
                 {
                     case (0):
-                        if (playerHeldDir != fishMoveDir) { fishStamina -= playerHeldStaminaDrain * Time.deltaTime; PlayerStamina -= _fishInfo.passiveDrain * Time.deltaTime; } else PlayerStamina += staminaRegenRate * Time.deltaTime;
                         floatObject.transform.position = Vector3.MoveTowards(floatObject.transform.position, lineStartPosition, .5f);
-
+                        if (playerHeldDir == 0)
+                        {
+                            FishStamina += fishInfo.fishRegen * Time.deltaTime;
+                            //  PlayerStamina -= _fishInfo.passiveDrain * Time.deltaTime;
+                        }
                         break;
                     case (-1):
-                        if(playerHeldDir == fishMoveDir)
+
+                        floatObject.transform.position = Vector3.MoveTowards(floatObject.transform.position, lineStartPosition + Quaternion.Euler(0, transform.eulerAngles.y, 0) * new Vector3(-4f, 0, 0), .5f);
+                        if (playerHeldDir == -1)
                         {
-                            PlayerStamina += staminaRegenRate * Time.deltaTime;
-                        } else if (playerHeldDir == 1) { PlayerStamina -= _fishInfo.passiveDrain * Time.deltaTime; } else
-                        {
-                            fishStamina -= playerHeldStaminaDrain * Time.deltaTime;
-                            PlayerStamina -= _fishInfo.passiveDrain * Time.deltaTime;
+                            FishStamina += fishInfo.fishRegen * wrongMod * Time.deltaTime;
+
                         }
-                        floatObject.transform.position = Vector3.MoveTowards(floatObject.transform.position, lineStartPosition + new Vector3(-4f,0,0), .5f);
+                        else if (playerHeldDir == 1)
+                        {
+                            FishStamina -= playerHeldStaminaDrain * Time.deltaTime;
+                            PlayerStamina -= fishInfo.passiveDrain * Time.deltaTime;
+                        }
+                        else if (playerHeldDir == 0)
+                        {
+                            FishStamina += fishInfo.fishRegen * wrongMod * Time.deltaTime;
+                            PlayerStamina -= fishInfo.passiveDrain * Time.deltaTime;
+                        }
 
                         break;
                     case (1):
-                        if (playerHeldDir == fishMoveDir)
+
+                        floatObject.transform.position = Vector3.MoveTowards(floatObject.transform.position, lineStartPosition + Quaternion.Euler(0, transform.eulerAngles.y, 0) * new Vector3(4f, 0, 0), .5f);
+
+
+                        if (playerHeldDir == 1)
                         {
-                            PlayerStamina += staminaRegenRate * Time.deltaTime;
+                            FishStamina += fishInfo.fishRegen * 2 * Time.deltaTime;
+
                         }
-                        else if (playerHeldDir == -1) { PlayerStamina -= _fishInfo.passiveDrain * Time.deltaTime; }
-                        else
+                        else if (playerHeldDir == -1)
                         {
-                            fishStamina -= playerHeldStaminaDrain * Time.deltaTime;
-                            PlayerStamina -= _fishInfo.passiveDrain * Time.deltaTime;
+                            FishStamina -= playerHeldStaminaDrain * Time.deltaTime;
+                            PlayerStamina -= fishInfo.passiveDrain * Time.deltaTime;
                         }
-                        floatObject.transform.position = Vector3.MoveTowards(floatObject.transform.position, lineStartPosition + new Vector3(4f, 0, 0), .5f);
+                        else if (playerHeldDir == 0)
+                        {
+                            FishStamina += fishInfo.fishRegen * 2 * Time.deltaTime;
+                            PlayerStamina -= fishInfo.passiveDrain * Time.deltaTime;
+                        }
+
                         break;
 
 
                 }
+                attackTimer += Time.deltaTime;
+                if (attackTimer >= actualtTimeBetweenAttacks)
+                {
+                    actualtTimeBetweenAttacks = Random.Range(0, timeBetweenAttacks);
+                    attackTimer = 0;
+                    int rnd = 0;// Random.Range(0, 2);
+                    if (!yeeting && !diving)
+                    {
+                        switch (rnd)
+                        {
+                            case (0):
+                                //YeEEt
+                                floatAnimator.SetBool("Yeet", true);
+                                Debug.Log("Yote");
+                                yeeting = true;
+                                attackDurationTimer = 0;
+                                actualtTimeBetweenAttacks += yeetWindow;
+                                break;
+                            case (1):
+                                //Dont yeet
+                                actualtTimeBetweenAttacks += diveWindow;
+                                floatAnimator.SetBool("Dive", true);
+                                attackDurationTimer = 0;
+                                diving = true;
+                                break;
+                        }
+                    }
 
+                }
+                if (yeeting)
+                {
+                    //                    Debug.Log("YEETING");
+
+                    attackDurationTimer += Time.deltaTime;
+                    // Debug.Log(attackDurationTimer + " " + yeetWindow);
+                    //                  Debug.Log(attackDurationTimer);
+                    if (attackDurationTimer >= yeetWindow)
+                    {
+
+                        Debug.Log("Yoted");
+                        playerLineStr -= fishInfo.yeetAttackDamage.lineDamage;
+                        yeeting = false;
+                        floatAnimator.SetBool("Yeet", false);
+                        attackDurationTimer = 0;
+                        attackTimer = 0;
+                    }
+                    else if (Input.GetKey(KeyCode.S))
+                    {
+                        Debug.Log("Saved");
+                        yeeting = false;
+                        floatAnimator.SetBool("Yeet", false);
+                        attackDurationTimer = 0;
+                        attackTimer = 0;
+                    }
+                }
 
                 timerVal1 += 1 * Time.deltaTime;
                 if (timerVal1 >= timeTilDirChange)
@@ -263,6 +390,12 @@ public class playercontroller : MonoBehaviour
                     //if (rnd == 1) { fishMovingRight = !fishMovingRight; }
                 }
 
+                if (playerStamina <= 0 || playerLineStr <= 0) { StartCoroutine(StopFishing()); }
+
+                if (fishStamina <= 0 && Input.GetMouseButton(1))
+                {
+                    CatchFish(lineStartPosition);
+                }
 
             }
 
@@ -300,12 +433,22 @@ public class playercontroller : MonoBehaviour
 
     void ResetFishBools()
     {
-
+        playerReacted = false;
         fishing = false;
         fishingPrepared = false;
         fishOnLine = false;
     }
+    public void CatchFish(Vector3 floatPos)
+    {
+        Debug.Log("FISH CAUTH!");
+        GameObject fishObject = Instantiate(fishInfo.caughtObject);
+        fishObject.transform.position = floatPos;
 
+
+        StartCoroutine(StopFishing());
+
+
+    }
 
     IEnumerator StartFish(Vector3 floatStartPosition)
     {
