@@ -13,7 +13,7 @@ public class FishInfo : ScriptableObject
     public float maxFishStamina = 50;
     public AudioClip song;
     public float fishRegen = 1;
-
+    public int scoreValue = 5;
 }
 [System.Serializable]
 public class FishAttackDamage

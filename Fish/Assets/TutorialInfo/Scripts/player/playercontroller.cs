@@ -16,6 +16,9 @@ public class playercontroller : MonoBehaviour
     FishInfo fishInfo;
     public LayerMask movemenMask;
     bool playerReacted = false;
+    [SerializeField]
+    FishInfo[] fishes;
+    public int score = 0;
     float fishStamina;
     float FishStamina
     {
@@ -49,7 +52,7 @@ public class playercontroller : MonoBehaviour
     [SerializeField] Graphic playerLineStrBar;
     [SerializeField] Graphic fishBar;
     #endregion
-
+    float fishTimer = 0;
     #region Player Fishing Stats
     [SerializeField] float staminaRegenRate = 5;
     [SerializeField] float playerMaxStamina = 100;
@@ -101,6 +104,7 @@ public class playercontroller : MonoBehaviour
         #region Not fishing
         if (!fishing)
         {
+            PlayerStamina += staminaRegenRate * Time.deltaTime;
             if (Input.GetMouseButtonDown(0))
             {
                 //Skjuter ut en raycast från muspositionen
@@ -140,11 +144,17 @@ public class playercontroller : MonoBehaviour
             if (fishingPrepared)
             {
                 Debug.Log("prepared");
-                if (Random.Range(0, 100) <= 25 && !fishOnLine)
+                fishTimer += Time.deltaTime;
+                if (fishTimer >= 3)
                 {
-                    StartCoroutine(FishOnLine(debugFish));
-                }
+                    fishTimer = 0;
+                    if (Random.Range(0, 100) <= 25 && !fishOnLine)
+                    {
 
+
+                        StartCoroutine(FishOnLine(fishes[Random.Range(0, fishes.Length)]));
+                    }
+                }
                 //      Debug.Log("Fish prep");
                 if (Input.GetKey(KeyCode.Escape))
                 {
@@ -214,7 +224,7 @@ public class playercontroller : MonoBehaviour
         Debug.Log("HOOKED");
         fishOnLine = true;
         floatAnimator.SetBool("Bounce", true);
-         playerReacted = false;
+        playerReacted = false;
         //bool fishMovingRight = false;
         //bool fishMoving = false;
         int fishMoveDir = 0;
@@ -405,9 +415,10 @@ public class playercontroller : MonoBehaviour
         }
     }
 
-    public void ResetStamina()
+    public void ResetLines()
     {
         PlayerStamina = playerMaxStamina;
+        playerLineStr = playerMaxLineStr;
     }
 
     IEnumerator StopFishing()
@@ -441,9 +452,18 @@ public class playercontroller : MonoBehaviour
     public void CatchFish(Vector3 floatPos)
     {
         Debug.Log("FISH CAUTH!");
-        GameObject fishObject = Instantiate(fishInfo.caughtObject);
-        fishObject.transform.position = floatPos;
-
+        GameObject fishObject;
+        if (fishInfo.caughtObject != null)
+        {
+            fishObject = Instantiate(fishInfo.caughtObject);
+        }
+        else fishObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        fishObject.transform.position = transform.position + new Vector3(0, 5, 0); 
+        if (fishObject.GetComponent<Rigidbody>() == null)
+        {
+            fishObject.AddComponent<Rigidbody>();
+        }
+        score += fishInfo.scoreValue;
 
         StartCoroutine(StopFishing());
 
