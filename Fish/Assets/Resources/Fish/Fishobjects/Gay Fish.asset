@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   probabilityWeight: 0.1
   fishname: Kanye West
-  caughtObject: {fileID: -927199367670048503, guid: 986ac1c29eb3ce14b80befe3bfefdc1c,
+  caughtObject: {fileID: 6949664790005482700, guid: 715b31fb7efc0774c92d8eb91682127a,
     type: 3}
   passiveDrain: 3
   diveAttackDamage:

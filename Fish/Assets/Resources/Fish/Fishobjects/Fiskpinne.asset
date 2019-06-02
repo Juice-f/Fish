@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   probabilityWeight: 0.1
   fishname: Fiskpinne
-  caughtObject: {fileID: 0}
+  caughtObject: {fileID: 3739558133237157448, guid: 8a35d16ea2f3e7f459899ccfe2195537,
+    type: 3}
   passiveDrain: 3
   diveAttackDamage:
     stmnDamage: 1

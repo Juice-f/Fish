@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   probabilityWeight: 0.1
   fishname: Hink
-  caughtObject: {fileID: -927199367670048503, guid: 4414da31a360f6d4fa2651c8bf229cfd,
+  caughtObject: {fileID: 6209692413316115587, guid: b4eeaa8e9f4e54d49a9fca9083737fae,
     type: 3}
   passiveDrain: 3
   diveAttackDamage:
