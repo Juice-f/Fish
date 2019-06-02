@@ -13,13 +13,14 @@ public class CameraController : MonoBehaviour
     {
         //currentZoom -= Input.GetAxis("Mouse ScrollWheel") * zoomspeed;
         //currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);
-    //    yawInput -= Input.GetAxis("Horizontal") * yawSpeed * Time.deltaTime;
-
+        //    yawInput -= Input.GetAxis("Horizontal") * yawSpeed * Time.deltaTime;
+        cameraRotation += Input.GetAxis("Mouse ScrollWheel") * 60;
     }
     void LateUpdate()
     {
         transform.position = target.position + Quaternion.Euler(0, cameraRotation, 0) * offset;
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, cameraRotation, transform.eulerAngles.z);
+        
      //   transform.LookAt(target.position + Vector3.up * pitch);
 
 
