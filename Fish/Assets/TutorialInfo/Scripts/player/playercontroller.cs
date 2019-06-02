@@ -25,6 +25,8 @@ public class playercontroller : MonoBehaviour
     [SerializeField] GameObject rod;
     [SerializeField] Transform rodEndPoint;
     [SerializeField] LineRenderer fishingLine;
+    [SerializeField] Animator floatAnimator;
+    [SerializeField] Transform lineEndPoint;
 
     #endregion
 
@@ -81,11 +83,11 @@ public class playercontroller : MonoBehaviour
         else
         {
             fishingLine.SetPosition(0, rodEndPoint.position);
-            fishingLine.SetPosition(1, floatObject.transform.position);
-            Debug.Log("Fishinf");
+            fishingLine.SetPosition(1, lineEndPoint.position);
+            //Debug.Log("Fishinf");
             if (fishingPrepared)
             {
-
+                Debug.Log("prepared");
                 if (Random.Range(0, 100) <= 25 && !fishOnLine)
                 {
                     StartCoroutine(FishOnLine(Resources.Load("", typeof(FishInfo)) as FishInfo));
@@ -129,9 +131,9 @@ public class playercontroller : MonoBehaviour
     IEnumerator FishOnLine(FishInfo fishInfo)
     {
         Vector3 lineStartPosition = floatObject.transform.position;
-
+        Debug.Log("HOOKED");
         fishOnLine = true;
-
+        floatAnimator.SetBool("Bounce", true);
         while (fishing && fishingPrepared && fishOnLine)
         {
 
@@ -151,7 +153,7 @@ public class playercontroller : MonoBehaviour
         {
             floatObject.transform.position = Vector3.MoveTowards(floatObject.transform.position, rodEndPoint.transform.position, 20f * Time.deltaTime);
             fishingLine.SetPosition(0, rodEndPoint.position);
-            fishingLine.SetPosition(1, floatObject.transform.position);
+            fishingLine.SetPosition(1, lineEndPoint.position);
             yield return new WaitForEndOfFrame();
         }
         while (rod.transform.localScale != Vector3.zero)
