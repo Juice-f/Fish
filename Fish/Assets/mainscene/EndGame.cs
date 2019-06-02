@@ -28,6 +28,7 @@ public class EndGame : Interactable
         Black.SetActive(true);
         Cursor.lockState = CursorLockMode.Locked;
         StartCoroutine(Timer());
+        GetComponent<playercontroller>.resetStamina();
         
     }
 
@@ -37,6 +38,7 @@ public class EndGame : Interactable
         yield return new WaitForSeconds(2f);
         Fadeout = false;
         Black.SetActive(false);
+
     }
 
 }
