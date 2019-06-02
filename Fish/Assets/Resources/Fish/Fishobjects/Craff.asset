@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   probabilityWeight: 0.1
   fishname: Creff
-  caughtObject: {fileID: 0}
+  caughtObject: {fileID: 8755058543480826187, guid: 03422fd935a7c5a4a8437531a6f9100d,
+    type: 3}
   passiveDrain: 3
   diveAttackDamage:
     stmnDamage: 3

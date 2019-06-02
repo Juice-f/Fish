@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   probabilityWeight: 0.1
   fishname: Giant Enemy Crab
-  caughtObject: {fileID: 0}
+  caughtObject: {fileID: 9786997830723780, guid: 43ac54280f4a71d4083acf596e475f8f,
+    type: 3}
   passiveDrain: 0
   diveAttackDamage:
     stmnDamage: 100
