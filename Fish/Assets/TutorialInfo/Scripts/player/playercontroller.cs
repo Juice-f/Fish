@@ -46,7 +46,7 @@ public class playercontroller : MonoBehaviour
     [SerializeField] float playerLineStr;
 
     #endregion
-
+    [SerializeField] FishInfo debugFish;
 
     void Start()
     {
@@ -65,7 +65,7 @@ public class playercontroller : MonoBehaviour
         float currentStm = playerStamina / playerMaxStamina;
         playerStaminaBar.rectTransform.localScale = new Vector3(currentStm, 1, 1);
         float currentLineStr = playerLineStr / playerMaxLineStr;
-        playerLineStrBar.rectTransform.localEulerAngles = new Vector3(currentLineStr, 1, 1);
+        playerLineStrBar.rectTransform.localScale = new Vector3(currentLineStr, 1, 1);
     }
 
     // Update is called once per frame
@@ -119,7 +119,7 @@ public class playercontroller : MonoBehaviour
                 Debug.Log("prepared");
                 if (Random.Range(0, 100) <= 25 && !fishOnLine)
                 {
-                    StartCoroutine(FishOnLine(Resources.Load("", typeof(FishInfo)) as FishInfo));
+                    StartCoroutine(FishOnLine(debugFish));
                 }
 
                 //      Debug.Log("Fish prep");
@@ -157,13 +157,15 @@ public class playercontroller : MonoBehaviour
         StartCoroutine(StartFish(floatStartPosition));
     }
 
-    IEnumerator FishOnLine(FishInfo fishInfo)
+    IEnumerator FishOnLine(FishInfo _fishInfo)
     {
         Vector3 lineStartPosition = floatObject.transform.position;
         Debug.Log("HOOKED");
         fishOnLine = true;
         floatAnimator.SetBool("Bounce", true);
         bool playerReacted = false;
+
+        float fishStamina = _fishInfo.maxFishStamina;
 
         while (fishing && fishingPrepared && fishOnLine)
         {
@@ -181,6 +183,14 @@ public class playercontroller : MonoBehaviour
                 floatAnimator.SetBool("Bounce", false);
                 yield return new WaitForSeconds(1);
                 exclamationPoint.SetActive(false);
+            }
+
+
+            if (playerReacted)
+            {
+                playerStamina -= _fishInfo.passiveDrain * Time.deltaTime;
+
+                    
             }
 
             yield return new WaitForEndOfFrame();
@@ -211,6 +221,7 @@ public class playercontroller : MonoBehaviour
 
     void ResetFishBools()
     {
+        
         fishing = false;
         fishingPrepared = false;
         fishOnLine = false;

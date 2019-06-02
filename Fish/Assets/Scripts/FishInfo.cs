@@ -7,7 +7,16 @@ public class FishInfo : ScriptableObject
     public float probabilityWeight = .1f;
     public string fishname = "John Standardfish";
     public GameObject caughtObject;
+    public float passiveDrain = 3;
+    public FishAttackDamage diveAttackDamage;
+    public FishAttackDamage yeetAttackDamage;
+    public float maxFishStamina = 50;
 
 
-
+}
+[System.Serializable]
+public class FishAttackDamage
+{
+    public float stmnDamage = 1;
+    public float lineDamage = 1;
 }
