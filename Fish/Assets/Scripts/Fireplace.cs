@@ -3,13 +3,51 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Fireplace : Interactable
+//{
 {
-    public GameObject theLocation;  
+    public playercontroller player;
+    public GameObject Fisk;
 
-    //public override void Interact()
-    //{
-    //    base.Interact();
-    //    Instantiate("abbo", theLocation.transform.position, transform.rotation);
-    //}
+
+    public void Start()
+    {
+        player = FindObjectOfType<playercontroller>();
+        
+    }
+
+
+
+    public override void Interact()
+    {
+        base.Interact();
+        Destroy(Fisk = GameObject.FindGameObjectWithTag("Fisk"));
+
+
+    }
 }
+
+//    public playercontroller player;
+//    public GameObject fiskar;
+
+
+//  public override void Interact()
+//    {
+//        base.Interact();
+      
+
+//    }
+//    public void Start()
+//    {
+//        player = FindObjectOfType<playercontroller>();
+//    }
+
+//    public void Update()
+//    {
+//        fiskar = GameObject.FindGameObjectWithTag("Fisk");
+//    }
+
+
+      
+//}
+
 
