@@ -46,7 +46,7 @@ public class playercontroller : MonoBehaviour
     [SerializeField] ParticleSystem splashSystem;
     [SerializeField] float playerHeldStaminaDrain = 10;
     [SerializeField] Text scoreText;
-
+    [SerializeField] Text catchText;
     #endregion
     #region Fishing Ui
     [SerializeField] Graphic playerStaminaBar;
@@ -459,6 +459,10 @@ public class playercontroller : MonoBehaviour
     }
     public void CatchFish(Vector3 floatPos)
     {
+        if (catchText != null)
+        {
+            catchText.text = "Caught: " + fishInfo.fishname;
+        }
         Debug.Log("FISH CAUTH!");
         GameObject fishObject;
         if (fishInfo.caughtObject != null)

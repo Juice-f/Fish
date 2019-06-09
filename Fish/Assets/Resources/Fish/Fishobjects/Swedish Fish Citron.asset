@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Swedish Fish Citron
   m_EditorClassIdentifier: 
   probabilityWeight: 0.1
-  fishname: Swedish Fish Citron
-  caughtObject: {fileID: 0}
+  fishname: Swedish FIsh
+  caughtObject: {fileID: 4779135916430270660, guid: 38dfdd9c9fd1ca742a90153675cdfb9c,
+    type: 3}
   passiveDrain: 3
   diveAttackDamage:
     stmnDamage: 1
@@ -22,8 +23,8 @@ MonoBehaviour:
   yeetAttackDamage:
     stmnDamage: 1
     lineDamage: 1
-  maxFishStamina: 50
-  song: {fileID: 0}
+  maxFishStamina: 120
+  song: {fileID: 8300000, guid: b0a555154789d884ebcf85b677e6da39, type: 3}
   fishRegen: 1
-  scoreValue: 20
+  scoreValue: 30
   staminaReward: 20

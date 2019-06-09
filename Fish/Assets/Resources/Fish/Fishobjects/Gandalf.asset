@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   probabilityWeight: 0.1
   fishname: Gandalf
-  caughtObject: {fileID: 0}
+  caughtObject: {fileID: 2427554373303552143, guid: 72413b8a0ed4f8c4dbb9b833e46d5cba,
+    type: 3}
   passiveDrain: 2
   diveAttackDamage:
     stmnDamage: 3
@@ -23,6 +24,7 @@ MonoBehaviour:
     stmnDamage: 3
     lineDamage: 3
   maxFishStamina: 450
-  song: {fileID: 0}
+  song: {fileID: 8300000, guid: b7a95dc0e555c4d4d85e26bbf403d165, type: 3}
   fishRegen: 5
   scoreValue: 5
+  staminaReward: 0

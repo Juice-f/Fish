@@ -16,5 +16,10 @@ public class TitleScreen : MonoBehaviour
         Application.Quit();
         Debug.Log("you quit the game");
     }
+
+    public void instructions()
+    {
+        SceneManager.LoadScene("Instructions");
+    }
 }
 

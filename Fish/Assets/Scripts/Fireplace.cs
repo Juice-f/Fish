@@ -7,7 +7,7 @@ public class Fireplace : Interactable
 {
     public playercontroller player;
     public GameObject Fisk;
-
+    public AudioSource music;
 
     public void Start()
     {
@@ -21,8 +21,9 @@ public class Fireplace : Interactable
     {
         base.Interact();
         FindObjectOfType<playercontroller>().playerMaxStamina += GameObject.FindGameObjectWithTag("Fisk").GetComponent<FishUp>().staminaVal;
+        
         Destroy(Fisk = GameObject.FindGameObjectWithTag("Fisk"));
-
+        GetComponent<AudioSource>().Play(0);
 
     }
 }
